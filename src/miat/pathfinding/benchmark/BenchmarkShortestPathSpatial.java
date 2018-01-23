@@ -21,6 +21,6 @@ public class BenchmarkShortestPathSpatial extends AbstractBenchmarkGraph<Coordin
 		} catch (IOException e) {
 			e.printStackTrace();
 		} 
-		super.run(graph, nbTests, rand, true);	
+		runAlgorithms1Path(graph, nbTests, rand, true);	
 	}
 }

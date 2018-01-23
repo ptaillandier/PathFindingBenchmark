@@ -12,6 +12,6 @@ public class BenchmarkShortestPathBarabasi extends AbstractBenchmarkGraph<Intege
 	
 	public void run(final int nbTests, final Integer nbInitNodes, final Integer nbFinalNodes, final Integer nbEdgeAdded, boolean weighted, final Random rand){
 		Graph<Integer, DefaultEdge> graph = RandomGraphs.generateGraphstreamBarabasiAlbert(nbInitNodes,nbFinalNodes, nbEdgeAdded, weighted, rand);
-		super.run(graph, nbTests, rand, false);	
+		runAlgorithms1Path(graph, nbTests, rand, false);	
 	}
 }

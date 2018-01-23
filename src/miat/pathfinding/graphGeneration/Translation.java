@@ -35,12 +35,14 @@ public class Translation {
 		boolean isDirected = graph.getType().isDirected();
 		boolean isWeighted = graph.getType().isWeighted();
 		for (Coordinate v : graph.vertexSet()) {
-			newGraph.addNode(v.toString());
+			Node n = newGraph.addNode(v.toString());
+			n.addAttribute("coordinate", v);
 		}
 		int i = 0;
 		for (DefaultEdge e : graph.edgeSet()) {
 			Edge edge = newGraph.addEdge(i+"", graph.getEdgeSource(e).toString(),graph.getEdgeTarget(e).toString(),isDirected);
 			if (isWeighted) edge.setAttribute("weight", graph.getEdgeWeight(e));
+			
 			i++;
 		}
 		return newGraph;
