@@ -25,7 +25,8 @@ public class GraphStreamAStar implements ShortestPathAlgorithm {
 		astar.compute();
 		Path path = astar.getShortestPath();
 		t = System.currentTimeMillis() - t;
-
+		if (path == null || path.getEdgePath().isEmpty()) return new Result(t, 0.0);
+		
 		return new Result(t, graph.getType().isWeighted() ? path.getPathWeight("weight") : path.getEdgeSet().size());
 		
 	}
@@ -56,7 +57,8 @@ public class GraphStreamAStar implements ShortestPathAlgorithm {
 		astar.compute();
 		Path path = astar.getShortestPath();
 		t = System.currentTimeMillis() - t;
-
+		if (path == null || path.getEdgePath().isEmpty()) return new Result(t, 0.0);
+		
 		return new Result(t, graph.getType().isWeighted() ? path.getPathWeight("weight") : path.getEdgeSet().size());
 	}
 

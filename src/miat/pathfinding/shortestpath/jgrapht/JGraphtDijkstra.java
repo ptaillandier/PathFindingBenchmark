@@ -21,6 +21,7 @@ public class JGraphtDijkstra implements ShortestPathAlgorithm {
 		GraphPath<Integer, DefaultEdge> path =dijkstra.getPath(so, ta);
 		
 		t = System.currentTimeMillis() - t;
+		if (path == null || path.getEdgeList().isEmpty()) return new Result(t, 0.0);
 		return new Result(t, graph.getType().isWeighted() ? path.getWeight() : path.getLength());
 	}
 	
@@ -40,8 +41,8 @@ public class JGraphtDijkstra implements ShortestPathAlgorithm {
 		DijkstraShortestPath<Coordinate, DefaultEdge> dijkstra = new DijkstraShortestPath<>(graph);
 		long t = System.currentTimeMillis();
 		GraphPath<Coordinate, DefaultEdge> path =dijkstra.getPath(source, target);
-		
 		t = System.currentTimeMillis() - t;
+		if (path == null || path.getEdgeList().isEmpty()) return new Result(t, 0.0);
 		return new Result(t, graph.getType().isWeighted() ? path.getWeight() : path.getLength());
 	}
 }

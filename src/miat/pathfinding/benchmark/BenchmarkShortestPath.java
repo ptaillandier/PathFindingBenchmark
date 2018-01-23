@@ -11,9 +11,9 @@ public class BenchmarkShortestPath {
 		barabasi.run(1, 1000, 10000, 10, false, new Random());*/
 		
 		BenchmarkShortestPathSpatial spatial = new BenchmarkShortestPathSpatial();
-		String path = "/Users/patrick/git/PathFindingBenchmark/data/shapefiles/roads.shp";
+		String path = "data/shapefiles/roads.shp";
 		
-		spatial.run(10, path,  false,new Random());
+		spatial.run(100, path,  false,new Random());
 		
 
 	}

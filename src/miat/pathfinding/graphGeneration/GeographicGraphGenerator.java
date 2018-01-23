@@ -61,13 +61,4 @@ public class GeographicGraphGenerator {
 		    return newGraph;
 		}
 		
-		public static void main(String[] args) {
-			String path = "/Users/patrick/git/PathFindingBenchmark/data/shapefiles/OSMnetwerk-centrum-small.shp";
-			GeographicGraphGenerator gen = new GeographicGraphGenerator();
-			try {
-				gen.generateFromShapefile(path, false);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 }

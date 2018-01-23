@@ -26,6 +26,8 @@ public class GraphStreamDijkstra implements ShortestPathAlgorithm {
 		dijkstra.compute();
 		Path path = dijkstra.getPath(tar);
 		t = System.currentTimeMillis() - t;
+		if (path == null || path.getEdgePath().isEmpty()) return new Result(t, 0.0);
+		
 		return new Result(t, graph.getType().isWeighted() ? path.getPathWeight("weight") : path.getEdgeSet().size());
 	}
 	
@@ -51,6 +53,7 @@ public class GraphStreamDijkstra implements ShortestPathAlgorithm {
 		dijkstra.compute();
 		Path path = dijkstra.getPath(tar);
 		t = System.currentTimeMillis() - t;
+		if (path == null || path.getEdgePath().isEmpty()) return new Result(t, 0.0);
 		
 		return new Result(t, graph.getType().isWeighted() ? path.getPathWeight("weight") : path.getEdgeSet().size());
 	}

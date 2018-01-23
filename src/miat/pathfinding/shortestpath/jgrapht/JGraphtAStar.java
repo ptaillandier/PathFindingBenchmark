@@ -26,6 +26,7 @@ public class JGraphtAStar implements ShortestPathAlgorithm {
 		Integer ta = Integer.valueOf(target);
 		long t = System.currentTimeMillis();
 		GraphPath<Integer, DefaultEdge> path =dijkstra.getPath(so, ta);
+		if (path == null || path.getEdgeList().isEmpty()) return new Result(t, 0.0);
 		
 		t = System.currentTimeMillis() - t;
 		return new Result(t, graph.getType().isWeighted() ? path.getWeight() : path.getLength());
@@ -56,6 +57,7 @@ public class JGraphtAStar implements ShortestPathAlgorithm {
 		AStarShortestPath<Coordinate, DefaultEdge> dijkstra = new AStarShortestPath<>(graph,heuristic);
 		long t = System.currentTimeMillis();
 		GraphPath<Coordinate, DefaultEdge> path =dijkstra.getPath(source, target);
+		if (path == null || path.getEdgeList().isEmpty()) return new Result(t, 0.0);
 		
 		t = System.currentTimeMillis() - t;
 		return new Result(t, graph.getType().isWeighted() ? path.getWeight() : path.getLength());
