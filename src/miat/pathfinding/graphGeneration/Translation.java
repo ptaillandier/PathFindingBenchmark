@@ -4,63 +4,78 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
 import org.jgraph.graph.DefaultEdge;
-import org.jgrapht.EdgeFactory;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.ClassBasedEdgeFactory;
-import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.graph.SimpleGraph;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
+import grph.algo.mobility.Location;
+import grph.algo.topology.manet.EuclideanGrph;
+import grph.in_memory.InMemoryGrph;
+import miat.pathfinding.graph.BenchmarkGraph;
+
 public class Translation {
 
-	public static org.graphstream.graph.Graph jGraphtToGraphStream(Graph<Integer, DefaultEdge> graph) {
+	public static org.graphstream.graph.Graph benchmarkGraphToGraphStream(BenchmarkGraph<Integer, DefaultEdge> graph) {
 		org.graphstream.graph.Graph newGraph = new SingleGraph("graph");
-		boolean isDirected = graph.getType().isDirected();
-		boolean isWeighted = graph.getType().isWeighted();
-		for (Integer v : graph.vertexSet()) {
+		boolean isDirected = graph.getGraph().getType().isDirected();
+		boolean isWeighted = graph.getGraph().getType().isWeighted();
+		for (Integer v : graph.getGraph().vertexSet()) {
 			newGraph.addNode(v.toString());
 		}
 		int i = 0;
-		for (DefaultEdge e : graph.edgeSet()) {
-			newGraph.addEdge(i+"", graph.getEdgeSource(e).toString(),graph.getEdgeTarget(e).toString(),isDirected);
-			if (isWeighted) newGraph.addAttribute("weight", graph.getEdgeWeight(e));
+		for (DefaultEdge e : graph.getGraph().edgeSet()) {
+			newGraph.addEdge(i+"", graph.getGraph().getEdgeSource(e).toString(),graph.getGraph().getEdgeTarget(e).toString(),isDirected);
+			if (isWeighted) newGraph.addAttribute("weight", graph.getGraph().getEdgeWeight(e));
 			i++;
 		}
 		return newGraph;
 	} 
 	
-	public static org.graphstream.graph.Graph jGraphtToGraphStreamSpatial(Graph<Coordinate, DefaultEdge> graph) {
+	public static InMemoryGrph benchmarkGraphToGrph(BenchmarkGraph<Integer, DefaultEdge> graph) {
+		InMemoryGrph newGraph = new InMemoryGrph();
+		boolean isDirected = graph.getGraph().getType().isDirected();
+		boolean isWeighted = graph.getGraph().getType().isWeighted();
+		for (Integer v : graph.getGraph().vertexSet()) {
+			newGraph.addVertex(v);
+		}
+		for (DefaultEdge e : graph.getGraph().edgeSet()) {
+			int edge = newGraph.addSimpleEdge(graph.getGraph().getEdgeSource(e), graph.getGraph().getEdgeTarget(e), isDirected);
+			if (isWeighted) newGraph.getEdgeWidthProperty().setValue(edge, graph.getGraph().getEdgeWeight(e)); 
+		}
+		return newGraph;
+	} 
+	
+	public static org.graphstream.graph.Graph benchmarkGraphToGraphStreamSpatial(BenchmarkGraph<Coordinate, DefaultEdge> graph) {
 		org.graphstream.graph.Graph newGraph = new SingleGraph("graph");
-		boolean isDirected = graph.getType().isDirected();
-		boolean isWeighted = graph.getType().isWeighted();
-		for (Coordinate v : graph.vertexSet()) {
-			Node n = newGraph.addNode(v.toString());
+		boolean isDirected = graph.getGraph().getType().isDirected();
+		boolean isWeighted = graph.getGraph().getType().isWeighted();
+		for (Coordinate v : graph.getGraph().vertexSet()) {
+			Node n = newGraph.addNode(graph.getVerticesIndex().get(v).toString());
 			n.addAttribute("coordinate", v);
 		}
 		int i = 0;
-		for (DefaultEdge e : graph.edgeSet()) {
-			Edge edge = newGraph.addEdge(i+"", graph.getEdgeSource(e).toString(),graph.getEdgeTarget(e).toString(),isDirected);
-			if (isWeighted) edge.setAttribute("weight", graph.getEdgeWeight(e));
+		for (DefaultEdge e : graph.getGraph().edgeSet()) {
+			Edge edge = newGraph.addEdge(i+"", graph.getVerticesIndex().get(graph.getGraph().getEdgeSource(e)).toString(),graph.getVerticesIndex().get(graph.getGraph().getEdgeTarget(e)).toString(),isDirected);
+			if (isWeighted) edge.setAttribute("weight", graph.getGraph().getEdgeWeight(e));
 			
 			i++;
 		}
 		return newGraph;
 	} 
 	
-	public static Graph<Integer, DefaultEdge> graphStreamToJGrapht(org.graphstream.graph.Graph graph) {
-		boolean isWeighted = graph.hasAttribute("weight");
-		boolean isDirected = graph.getEdgeSet().size() > 0 && graph.getEdge(0).isDirected();
-		EdgeFactory<Integer, DefaultEdge> factory = new ClassBasedEdgeFactory<Integer,DefaultEdge>(DefaultEdge.class);
-		Graph<Integer,DefaultEdge> newGraph = isDirected ? new SimpleDirectedGraph<Integer,DefaultEdge>(factory, isWeighted) : new SimpleGraph<>(factory, isWeighted);
-		for (Node v : graph.getNodeSet()) {
-			newGraph.addVertex(v.getIndex());
+	public static InMemoryGrph benchmarkGraphToGrphSpatial(BenchmarkGraph<Coordinate, DefaultEdge> graph) {
+		EuclideanGrph newGraph = new EuclideanGrph();
+		boolean isDirected = graph.getGraph().getType().isDirected();
+		boolean isWeighted = graph.getGraph().getType().isWeighted();
+		for (Coordinate v : graph.getGraph().vertexSet()) {
+			int id = graph.getVerticesIndex().get(v);
+			newGraph.addVertex(id);
+			newGraph.setLocation(id, new Location(v.x, v.y));	
 		}
-		for (Edge e : graph.getEdgeSet()) {
-			DefaultEdge edge = new DefaultEdge(e.getId());
-			newGraph.addEdge(e.getSourceNode().getIndex(), e.getTargetNode().getIndex(), edge);
-			newGraph.setEdgeWeight(edge, graph.getAttribute("weight"));
+		for (DefaultEdge e : graph.getGraph().edgeSet()) {
+			int edge = newGraph.addSimpleEdge(graph.getVerticesIndex().get(graph.getGraph().getEdgeSource(e)), graph.getVerticesIndex().get(graph.getGraph().getEdgeTarget(e)), isDirected);
+			if (isWeighted) newGraph.getEdgeWidthProperty().setValue(edge, graph.getGraph().getEdgeWeight(e)); 
+		
 		}
 		return newGraph;
-	}
+	} 
 }

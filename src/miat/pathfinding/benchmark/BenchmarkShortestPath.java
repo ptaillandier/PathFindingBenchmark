@@ -13,7 +13,7 @@ public class BenchmarkShortestPath {
 		BenchmarkShortestPathSpatial spatial = new BenchmarkShortestPathSpatial();
 		String path = "data/shapefiles/routes_simplifieees_lanes_pont_guillaume_ok.shp";
 		
-		spatial.run(10, path,  false,new Random());
+		spatial.run(2, path,  false,new Random());
 		
 
 	}

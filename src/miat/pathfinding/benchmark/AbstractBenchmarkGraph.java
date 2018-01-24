@@ -7,10 +7,10 @@ import java.util.Map;
 import java.util.Random;
 
 import org.jgraph.graph.DefaultEdge;
-import org.jgrapht.Graph;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
+import miat.pathfinding.graph.BenchmarkGraph;
 import miat.pathfinding.results.Result;
 import miat.pathfinding.shortestpath.ShortestPathAlgorithm;
 import miat.pathfinding.shortestpath.ShortestPathAlgorithms;
@@ -18,9 +18,9 @@ import miat.pathfinding.shortestpath.ShortestPathAlgorithms;
 public class AbstractBenchmarkGraph<V,E> {
 
 	@SuppressWarnings("unchecked")
-	public void runAlgorithms1Path(Graph<V, E> graph, final int nbTests,final Random rand, boolean spatialGraph){
+	public void runAlgorithms1Path(BenchmarkGraph<V, E> graph, final int nbTests,final Random rand, boolean spatialGraph){
 		ShortestPathAlgorithms algos = new ShortestPathAlgorithms();
-		List<V> nodes = new ArrayList<>(graph.vertexSet());
+		List<V> nodes = new ArrayList<>(graph.getGraph().vertexSet());
 		Map<ShortestPathAlgorithm, List<Result>> results = new HashMap<ShortestPathAlgorithm, List<Result>>() ;
 		
 		for (int i = 0; i < nbTests; i++) {
@@ -31,8 +31,8 @@ public class AbstractBenchmarkGraph<V,E> {
 				continue;
 			}
 			for (ShortestPathAlgorithm algo: algos.getAlgorithms1Path()) {
-				Result result =spatialGraph ?  algo.spatialShortestPathComputation((Graph<Coordinate, DefaultEdge>) graph, (Coordinate) source,(Coordinate) target)
-						: algo.shortestPathComputation((Graph<Integer, DefaultEdge>) graph, source.toString(), target.toString()) ;
+				Result result =spatialGraph ?  algo.spatialShortestPathComputation((BenchmarkGraph<Coordinate, DefaultEdge>) graph, (Coordinate) source,(Coordinate) target)
+						: algo.shortestPathComputation((BenchmarkGraph<Integer, DefaultEdge>) graph, (Integer) source, (Integer)target) ;
 				
 				if (!results.containsKey(algo)) results.put(algo, new ArrayList<>());
 				results.get(algo).add(result);

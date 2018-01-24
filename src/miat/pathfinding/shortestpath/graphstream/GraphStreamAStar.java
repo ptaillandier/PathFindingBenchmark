@@ -6,10 +6,10 @@ import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.Path;
 import org.jgraph.graph.DefaultEdge;
-import org.jgrapht.Graph;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
+import miat.pathfinding.graph.BenchmarkGraph;
 import miat.pathfinding.graphGeneration.Translation;
 import miat.pathfinding.results.Result;
 import miat.pathfinding.shortestpath.ShortestPathAlgorithm;
@@ -17,12 +17,12 @@ import miat.pathfinding.shortestpath.ShortestPathAlgorithm;
 public class GraphStreamAStar implements ShortestPathAlgorithm {
 
 	@Override
-	public Result shortestPathComputation(Graph<Integer, DefaultEdge> graph, String source, String target) {
-		org.graphstream.graph.Graph gsg = Translation.jGraphtToGraphStream(graph);
+	public Result shortestPathComputation(BenchmarkGraph<Integer, DefaultEdge> graph, Integer source, Integer target) {
+		org.graphstream.graph.Graph gsg = Translation.benchmarkGraphToGraphStream(graph);
 		AStar astar = new AStar();
 		astar.init(gsg);
-		astar.setSource(source);
-		astar.setTarget(target);
+		astar.setSource(source.toString());
+		astar.setTarget(target.toString());
 		
 		long t = System.currentTimeMillis();
 		astar.compute();
@@ -61,12 +61,12 @@ public class GraphStreamAStar implements ShortestPathAlgorithm {
 	}
 
 	@Override
-	public Result spatialShortestPathComputation(Graph<Coordinate, DefaultEdge> graph, Coordinate source, Coordinate target) {
-		org.graphstream.graph.Graph gsg = Translation.jGraphtToGraphStreamSpatial(graph);
+	public Result spatialShortestPathComputation(BenchmarkGraph<Coordinate, DefaultEdge> graph, Coordinate source, Coordinate target) {
+		org.graphstream.graph.Graph gsg = Translation.benchmarkGraphToGraphStreamSpatial(graph);
 		AStar astar = new AStar();
 		astar.init(gsg);
-		astar.setSource(source.toString());
-		astar.setTarget(target.toString());
+		astar.setSource(graph.getStrId(source));
+		astar.setTarget(graph.getStrId(target));
 		astar.setCosts(new DistanceCosts());
 		long t = System.currentTimeMillis();
 		astar.compute();

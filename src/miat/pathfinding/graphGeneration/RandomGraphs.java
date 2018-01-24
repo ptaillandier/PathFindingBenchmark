@@ -11,21 +11,27 @@ import org.jgrapht.generate.CompleteGraphGenerator;
 import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.graph.SimpleGraph;
 
+import miat.pathfinding.graph.BenchmarkGraph;
+
 public class RandomGraphs {
 
-	public static Graph<Integer,DefaultEdge> generateGraphstreamBarabasiAlbert(final Integer nbInitNodes, final Integer nbFinalNodes, final Integer nbEdgeAdded, boolean weighted, final Random rand) {
+	public static BenchmarkGraph<Integer,DefaultEdge> generateGraphstreamBarabasiAlbert(final Integer nbInitNodes, final Integer nbFinalNodes, final Integer nbEdgeAdded, boolean weighted, final Random rand) {
+		BenchmarkGraph<Integer,DefaultEdge> g = new BenchmarkGraph<>();
 		BarabasiAlbertGraphGenerator<Integer, DefaultEdge> generator = new BarabasiAlbertGraphGenerator<>(nbInitNodes, nbEdgeAdded, nbFinalNodes, rand);
 		EdgeFactory<Integer, DefaultEdge> factory = new ClassBasedEdgeFactory<>(DefaultEdge.class);
 		Graph<Integer,DefaultEdge> graph = new SimpleGraph<Integer,DefaultEdge>(factory, weighted); 
 		generator.generateGraph(graph, new IntegerVertexFactory(), null);
-		return graph;
+		g.setGraph(graph);
+		return g;
 	}
 	
-	public static Graph<Integer,DefaultEdge> generateCompleteGraph(final Integer nbNodes,boolean weighted) {
+	public static BenchmarkGraph<Integer,DefaultEdge> generateCompleteGraph(final Integer nbNodes,boolean weighted) {
+		BenchmarkGraph<Integer,DefaultEdge> g = new BenchmarkGraph<>();
 		EdgeFactory<Integer, DefaultEdge> factory = new ClassBasedEdgeFactory<>(DefaultEdge.class);
 		Graph<Integer,DefaultEdge> graph = new SimpleGraph<Integer,DefaultEdge>(factory, weighted); 
 		CompleteGraphGenerator<Integer, DefaultEdge> generator = new CompleteGraphGenerator<Integer, DefaultEdge>(nbNodes);
 		generator.generateGraph(graph, new IntegerVertexFactory(), null);
-		return graph;
+		g.setGraph(graph);
+		return g;
 	}
 }

@@ -23,10 +23,13 @@ import org.opengis.filter.Filter;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
+import miat.pathfinding.graph.BenchmarkGraph;
+
 
 public class GeographicGraphGenerator {
 
-		public Graph<Coordinate, DefaultEdge> generateFromShapefile(String path, boolean directed) throws IOException{
+		public BenchmarkGraph<Coordinate, DefaultEdge> generateFromShapefile(String path, boolean directed) throws IOException{
+			BenchmarkGraph<Coordinate, DefaultEdge> g = new BenchmarkGraph<>();
 			File file = new File(path);
 		    Map<String, Object> map = new HashMap<>();
 		    map.put("url", file.toURI().toURL());
@@ -43,22 +46,34 @@ public class GeographicGraphGenerator {
 			Graph<Coordinate,DefaultEdge> newGraph = directed ? new SimpleDirectedGraph<Coordinate,DefaultEdge>(factory, true) : new SimpleGraph<Coordinate,DefaultEdge>(factory, true);
 			
 		    try (FeatureIterator<SimpleFeature> features = collection.features()) {
+		    	int i = 0;
 		        while (features.hasNext()) {
 		            SimpleFeature feature = features.next();
 		           	Geometry line = (Geometry) feature.getDefaultGeometry();
+		           	
 		           	Coordinate pt0 = line.getCoordinates()[0];
-		        	Coordinate ptL = line.getCoordinates()[line.getCoordinates().length - 1];
+		           	Coordinate ptL = line.getCoordinates()[line.getCoordinates().length - 1];
 		        	if (pt0.equals(ptL)) continue;
+		        	
+		           	if (!g.getVerticesIndex().containsKey(pt0)) {
+		           		g.getVerticesIndex().put(pt0, i);
+		           		i++;
+		           	}
+		        	if (!g.getVerticesIndex().containsKey(ptL)) {
+		           		g.getVerticesIndex().put(ptL, i);
+		           		i++;
+		           	}
 		        	newGraph.addVertex(pt0);
 		        	newGraph.addVertex(ptL);
-		           	DefaultEdge edge = new DefaultEdge(line);
+		        	DefaultEdge edge = new DefaultEdge(line);
 		           	newGraph.addEdge(pt0, ptL,edge);
 		        }
 		    }
 		    for (DefaultEdge edge : newGraph.edgeSet()) {
 		    	newGraph.setEdgeWeight(edge,((Geometry) edge.getUserObject()).getLength());
 		    }
-		    return newGraph;
+		    g.setGraph(newGraph);
+		    return g;
 		}
 		
 }

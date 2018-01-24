@@ -1,24 +1,22 @@
 package miat.pathfinding.shortestpath.jgrapht;
 
 import org.jgraph.graph.DefaultEdge;
-import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
+import miat.pathfinding.graph.BenchmarkGraph;
 import miat.pathfinding.results.Result;
 import miat.pathfinding.shortestpath.ShortestPathAlgorithm;
 
 public class JGraphtDijkstra implements ShortestPathAlgorithm {
 
 	@Override
-	public Result shortestPathComputation(Graph<Integer, DefaultEdge> graph, String source, String target) {
-		DijkstraShortestPath<Integer, DefaultEdge> dijkstra = new DijkstraShortestPath<>(graph);
-		Integer so = Integer.valueOf(source);
-		Integer ta = Integer.valueOf(target);
+	public Result shortestPathComputation(BenchmarkGraph<Integer, DefaultEdge> graph, Integer source, Integer target) {
+		DijkstraShortestPath<Integer, DefaultEdge> dijkstra = new DijkstraShortestPath<>(graph.getGraph());
 		long t = System.currentTimeMillis();
-		GraphPath<Integer, DefaultEdge> path =dijkstra.getPath(so, ta);
+		GraphPath<Integer, DefaultEdge> path =dijkstra.getPath(source, target);
 		
 		t = System.currentTimeMillis() - t;
 		if (path == null || path.getEdgeList().isEmpty()) return new Result(t, 0.0);
@@ -36,9 +34,9 @@ public class JGraphtDijkstra implements ShortestPathAlgorithm {
 	}
 
 	@Override
-	public Result spatialShortestPathComputation(Graph<Coordinate, DefaultEdge> graph, Coordinate source,
+	public Result spatialShortestPathComputation(BenchmarkGraph<Coordinate, DefaultEdge> graph, Coordinate source,
 			Coordinate target) {
-		DijkstraShortestPath<Coordinate, DefaultEdge> dijkstra = new DijkstraShortestPath<>(graph);
+		DijkstraShortestPath<Coordinate, DefaultEdge> dijkstra = new DijkstraShortestPath<>(graph.getGraph());
 		long t = System.currentTimeMillis();
 		GraphPath<Coordinate, DefaultEdge> path =dijkstra.getPath(source, target);
 		t = System.currentTimeMillis() - t;

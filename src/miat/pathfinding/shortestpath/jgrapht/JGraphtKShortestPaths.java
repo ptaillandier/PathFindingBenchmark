@@ -3,24 +3,22 @@ package miat.pathfinding.shortestpath.jgrapht;
 import java.util.List;
 
 import org.jgraph.graph.DefaultEdge;
-import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.KShortestPaths;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
+import miat.pathfinding.graph.BenchmarkGraph;
 import miat.pathfinding.results.Result;
 import miat.pathfinding.shortestpath.KShortestPathAlgorithm;
 
 public class JGraphtKShortestPaths implements KShortestPathAlgorithm {
 	
 	@Override
-	public Result KshortestPathComputation(Graph<Integer, DefaultEdge> graph, String source, String target, int nb) {
-		KShortestPaths<Integer, DefaultEdge> bf = new KShortestPaths<>(graph, nb);
-		Integer so = Integer.valueOf(source);
-		Integer ta = Integer.valueOf(target);
+	public Result KshortestPathComputation(BenchmarkGraph<Integer, DefaultEdge> graph, Integer source, Integer target, int nb) {
+		KShortestPaths<Integer, DefaultEdge> bf = new KShortestPaths<>(graph.getGraph(), nb);
 		long t = System.currentTimeMillis();
-		List<GraphPath<Integer, DefaultEdge>> paths =bf.getPaths(so, ta);
+		List<GraphPath<Integer, DefaultEdge>> paths =bf.getPaths(source, target);
 		
 		t = System.currentTimeMillis() - t;
 		if (paths == null || paths.isEmpty()) return new Result(t, 0.0);
@@ -40,9 +38,9 @@ public class JGraphtKShortestPaths implements KShortestPathAlgorithm {
 	}
 
 	@Override
-	public Result KspatialShortestPathComputation(Graph<Coordinate, DefaultEdge> graph, Coordinate source,
+	public Result KspatialShortestPathComputation(BenchmarkGraph<Coordinate, DefaultEdge> graph, Coordinate source,
 			Coordinate target, int nb) {
-		KShortestPaths<Coordinate, DefaultEdge> bf = new KShortestPaths<>(graph, nb);
+		KShortestPaths<Coordinate, DefaultEdge> bf = new KShortestPaths<>(graph.getGraph(), nb);
 		long t = System.currentTimeMillis();
 		List<GraphPath<Coordinate, DefaultEdge>> paths =bf.getPaths(source, target);
 		

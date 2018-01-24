@@ -7,6 +7,8 @@ import java.util.Random;
 import miat.pathfinding.shortestpath.graphstream.GraphStreamAStar;
 import miat.pathfinding.shortestpath.graphstream.GraphStreamBellmanFord;
 import miat.pathfinding.shortestpath.graphstream.GraphStreamDijkstra;
+import miat.pathfinding.shortestpath.grph.GrphDijkstra;
+import miat.pathfinding.shortestpath.grph.GrphStackBasedBellmanFord;
 import miat.pathfinding.shortestpath.jgrapht.JGraphtALTAstar;
 import miat.pathfinding.shortestpath.jgrapht.JGraphtAStar;
 import miat.pathfinding.shortestpath.jgrapht.JGraphtBellmanFord;
@@ -30,6 +32,9 @@ public class ShortestPathAlgorithms {
 		algorithms1path.add(new GraphStreamDijkstra());
 		algorithms1path.add(new GraphStreamAStar());
 	//	algorithms1path.add(new GraphStreamBellmanFord());
+
+		algorithms1path.add(new GrphDijkstra());
+		algorithms1path.add(new GrphStackBasedBellmanFord());
 		
 		algorithmsAllpaths = new ArrayList<>();
 		algorithmsAllpaths.add(new JGraphtJohnsonShortestPaths());
