@@ -10,13 +10,13 @@ import com.vividsolutions.jts.geom.Coordinate;
 import miat.pathfinding.graph.BenchmarkGraph;
 import miat.pathfinding.graphGeneration.Translation;
 import miat.pathfinding.results.Result;
-import miat.pathfinding.shortestpath.ShortestPathAlgorithm;
+import miat.pathfinding.shortestpath.AbstractShortestPathAlgorihm;
 
-public class GraphStreamBellmanFord implements ShortestPathAlgorithm {
+public class GraphStreamBellmanFord extends AbstractShortestPathAlgorihm<org.graphstream.graph.Graph> {
 
 	@Override
 	public Result shortestPathComputation(BenchmarkGraph<Integer, DefaultEdge> graph, Integer source, Integer target) {
-		org.graphstream.graph.Graph gsg = Translation.benchmarkGraphToGraphStream(graph);
+		org.graphstream.graph.Graph gsg = getCache() == null ? Translation.benchmarkGraphToGraphStream(graph)  : getCache();
 		BellmanFord bellman = new BellmanFord("weight");
 		bellman.init(gsg);
 		bellman.setSource(source.toString());
@@ -43,7 +43,7 @@ public class GraphStreamBellmanFord implements ShortestPathAlgorithm {
 
 	@Override
 	public Result spatialShortestPathComputation(BenchmarkGraph<Coordinate, DefaultEdge> graph, Coordinate source, Coordinate target) {
-		org.graphstream.graph.Graph gsg = Translation.benchmarkGraphToGraphStreamSpatial(graph);
+		org.graphstream.graph.Graph gsg = getCache() == null ?Translation.benchmarkGraphToGraphStreamSpatial(graph) : getCache();
 		BellmanFord bellman = new BellmanFord("weight");
 		bellman.init(gsg);
 		bellman.setSource(graph.getStrId(source));

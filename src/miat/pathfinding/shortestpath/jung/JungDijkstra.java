@@ -12,13 +12,14 @@ import edu.uci.ics.jung.graph.SparseGraph;
 import miat.pathfinding.graph.BenchmarkGraph;
 import miat.pathfinding.graphGeneration.Translation;
 import miat.pathfinding.results.Result;
-import miat.pathfinding.shortestpath.ShortestPathAlgorithm;
+import miat.pathfinding.shortestpath.AbstractShortestPathAlgorihm;
 
-public class JungDijkstra implements ShortestPathAlgorithm {
+public class JungDijkstra<V,E> extends AbstractShortestPathAlgorihm<SparseGraph<V,E>> {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Result shortestPathComputation(BenchmarkGraph<Integer, DefaultEdge> graph, Integer source, Integer target) {
-		SparseGraph<Integer, Integer> gsg = Translation.benchmarkGraphToJung(graph);
+		SparseGraph<Integer, Integer> gsg = getCache() == null ? Translation.benchmarkGraphToJung(graph) : (SparseGraph<Integer, Integer>) getCache();
 		DijkstraShortestPath<Integer, Integer> dijkstra = new DijkstraShortestPath<>(gsg, new WeightFunction1(), false);
 		
 		dijkstra.enableCaching(true);
@@ -38,9 +39,10 @@ public class JungDijkstra implements ShortestPathAlgorithm {
 		return "Dijkstra";
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Result spatialShortestPathComputation(BenchmarkGraph<Coordinate, DefaultEdge> graph, Coordinate source, Coordinate target) {
-		SparseGraph<Coordinate, Geometry> gsg = Translation.benchmarkGraphToJungSpatial(graph);
+		SparseGraph<Coordinate, Geometry> gsg = getCache() == null ? Translation.benchmarkGraphToJungSpatial(graph) : (SparseGraph<Coordinate, Geometry>) getCache();
 		DijkstraShortestPath<Coordinate, Geometry> dijkstra = new DijkstraShortestPath<>(gsg, new WeightFunctionSpatial(), false);
 		dijkstra.enableCaching(true);
 		long t = System.currentTimeMillis();

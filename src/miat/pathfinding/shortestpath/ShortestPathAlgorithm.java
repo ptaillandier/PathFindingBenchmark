@@ -7,8 +7,11 @@ import com.vividsolutions.jts.geom.Coordinate;
 import miat.pathfinding.graph.BenchmarkGraph;
 import miat.pathfinding.results.Result;
 
-public interface ShortestPathAlgorithm {
+public interface ShortestPathAlgorithm<G> {
 
+	void setCache(G graph);
+	public G getCache();
+	void releaseCache();
 	String getLibrary();
 	String getName();
 	Result shortestPathComputation(BenchmarkGraph<Integer, DefaultEdge> graph, Integer source, Integer target);

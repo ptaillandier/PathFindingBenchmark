@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import miat.pathfinding.shortestpath.coderodde.CodeRoddDijstra;
+import miat.pathfinding.shortestpath.coderodde.CodeRoddAStar;
+import miat.pathfinding.shortestpath.coderodde.CodeRoddNBAStar;
 import miat.pathfinding.shortestpath.graphstream.GraphStreamAStar;
 import miat.pathfinding.shortestpath.graphstream.GraphStreamBellmanFord;
 import miat.pathfinding.shortestpath.graphstream.GraphStreamDijkstra;
@@ -23,6 +26,7 @@ public class ShortestPathAlgorithms {
 	private final List<ShortestPathAlgorithm> algorithms1path;
 	private final List<ShortestPathAlgorithm> algorithmsAllpaths;
 	
+	
 	public ShortestPathAlgorithms(){
 		algorithms1path = new ArrayList<>();
 		algorithms1path.add(new JGraphtDijkstra());
@@ -35,9 +39,14 @@ public class ShortestPathAlgorithms {
 		//algorithms1path.add(new GraphStreamBellmanFord());
 
 		//algorithms1path.add(new GrphDijkstra());
-		algorithms1path.add(new GrphStackBasedBellmanFord());
+		//algorithms1path.add(new GrphStackBasedBellmanFord());
 		
-		algorithms1path.add(new JungDijkstra());
+		//algorithms1path.add(new JungDijkstra());
+		
+
+		algorithms1path.add(new CodeRoddAStar());
+		algorithms1path.add(new CodeRoddDijstra());
+		algorithms1path.add(new CodeRoddNBAStar());
 		
 		algorithmsAllpaths = new ArrayList<>();
 		algorithmsAllpaths.add(new JGraphtJohnsonShortestPaths());

@@ -12,13 +12,13 @@ import com.vividsolutions.jts.geom.Coordinate;
 import miat.pathfinding.graph.BenchmarkGraph;
 import miat.pathfinding.graphGeneration.Translation;
 import miat.pathfinding.results.Result;
-import miat.pathfinding.shortestpath.ShortestPathAlgorithm;
+import miat.pathfinding.shortestpath.AbstractShortestPathAlgorihm;
 
-public class GraphStreamAStar implements ShortestPathAlgorithm {
+public class GraphStreamAStar extends AbstractShortestPathAlgorihm<org.graphstream.graph.Graph>{
 
 	@Override
 	public Result shortestPathComputation(BenchmarkGraph<Integer, DefaultEdge> graph, Integer source, Integer target) {
-		org.graphstream.graph.Graph gsg = Translation.benchmarkGraphToGraphStream(graph);
+		org.graphstream.graph.Graph gsg = getCache() == null ? Translation.benchmarkGraphToGraphStream(graph) : getCache();
 		AStar astar = new AStar();
 		astar.init(gsg);
 		astar.setSource(source.toString());
@@ -62,7 +62,7 @@ public class GraphStreamAStar implements ShortestPathAlgorithm {
 
 	@Override
 	public Result spatialShortestPathComputation(BenchmarkGraph<Coordinate, DefaultEdge> graph, Coordinate source, Coordinate target) {
-		org.graphstream.graph.Graph gsg = Translation.benchmarkGraphToGraphStreamSpatial(graph);
+		org.graphstream.graph.Graph gsg = getCache() == null ? Translation.benchmarkGraphToGraphStreamSpatial(graph) : getCache();
 		AStar astar = new AStar();
 		astar.init(gsg);
 		astar.setSource(graph.getStrId(source));

@@ -1,6 +1,7 @@
 package miat.pathfinding.shortestpath.jgrapht;
 
 import org.jgraph.graph.DefaultEdge;
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.FloydWarshallShortestPaths;
 
@@ -8,9 +9,9 @@ import com.vividsolutions.jts.geom.Coordinate;
 
 import miat.pathfinding.graph.BenchmarkGraph;
 import miat.pathfinding.results.Result;
-import miat.pathfinding.shortestpath.ShortestPathAlgorithm;
+import miat.pathfinding.shortestpath.AbstractShortestPathAlgorihm;
 
-public class JGraphtFloydWarshall implements ShortestPathAlgorithm {
+public class JGraphtFloydWarshall<V,E> extends AbstractShortestPathAlgorihm<Graph<V,E>> {
 
 	@Override
 	public Result shortestPathComputation(BenchmarkGraph<Integer, DefaultEdge> graph, Integer source, Integer target) {

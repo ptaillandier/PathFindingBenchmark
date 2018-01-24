@@ -6,9 +6,9 @@ import grph.in_memory.InMemoryGrph;
 import grph.path.ArrayListPath;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import miat.pathfinding.results.Result;
-import miat.pathfinding.shortestpath.ShortestPathAlgorithm;
+import miat.pathfinding.shortestpath.AbstractShortestPathAlgorihm;
 
-public abstract class GrphShortestPathAlgo implements ShortestPathAlgorithm {
+public abstract class GrphShortestPathAlgo extends AbstractShortestPathAlgorihm<InMemoryGrph> {
 
 	public Result shortestPathComputation(SingleSourceSearchAlgorithm<SearchResult> algo, InMemoryGrph grph, boolean isWeighted, Integer source, Integer target) {
 		long t = System.currentTimeMillis();

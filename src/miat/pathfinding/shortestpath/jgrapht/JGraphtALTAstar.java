@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.jgraph.graph.DefaultEdge;
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.ALTAdmissibleHeuristic;
 import org.jgrapht.alg.shortestpath.AStarShortestPath;
@@ -15,9 +16,9 @@ import com.vividsolutions.jts.geom.Coordinate;
 
 import miat.pathfinding.graph.BenchmarkGraph;
 import miat.pathfinding.results.Result;
-import miat.pathfinding.shortestpath.ShortestPathAlgorithm;
+import miat.pathfinding.shortestpath.AbstractShortestPathAlgorihm;
 
-public class JGraphtALTAstar implements ShortestPathAlgorithm {
+public class JGraphtALTAstar<V,E> extends AbstractShortestPathAlgorihm<Graph<V,E>> {
 	double proportionLandmarks = 0.1;
 	Random rand;
 	

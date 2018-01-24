@@ -1,5 +1,7 @@
 package miat.pathfinding.graphGeneration;
 
+import java.awt.geom.Point2D;
+
 import org.graphstream.graph.Edge;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.SingleGraph;
@@ -14,6 +16,9 @@ import grph.algo.mobility.Location;
 import grph.algo.topology.manet.EuclideanGrph;
 import grph.in_memory.InMemoryGrph;
 import miat.pathfinding.graph.BenchmarkGraph;
+import miat.pathfinding.shortestpath.coderodde.DirectedGraph;
+import miat.pathfinding.shortestpath.coderodde.DirectedGraphNodeCoordinates;
+import miat.pathfinding.shortestpath.coderodde.DirectedGraphWeightFunction;
 
 public class Translation {
 
@@ -110,4 +115,49 @@ public class Translation {
 		}
 		return newGraph;
 	} 
+	
+	public static DirectedGraph benchmarkGraphToCodeRode (BenchmarkGraph<Integer, DefaultEdge> graph) {
+		boolean isDirected = graph.getGraph().getType().isDirected();  
+		DirectedGraph newGraph = new DirectedGraph();
+		
+		for (Integer v : graph.getGraph().vertexSet()) {
+			newGraph.addNode(v);
+		}
+		DirectedGraphWeightFunction function = new DirectedGraphWeightFunction();
+		for (DefaultEdge e : graph.getGraph().edgeSet()) {
+			newGraph.addArc(graph.getEdgeSource(e),graph.getEdgeTarget(e));
+			function.put(graph.getEdgeSource(e), graph.getEdgeTarget(e), 1.0);
+			if (! isDirected) {
+				newGraph.addArc(graph.getEdgeTarget(e),graph.getEdgeSource(e));
+				function.put(graph.getEdgeTarget(e), graph.getEdgeSource(e), 1.0);
+			}
+		}
+		newGraph.setWeightFunction(function);
+		return newGraph;
+	} 
+	
+	public static DirectedGraph benchmarkGraphToCodeRodeSpatial (BenchmarkGraph<Coordinate, DefaultEdge> graph) {
+		boolean isDirected = graph.getGraph().getType().isDirected();  
+		DirectedGraph newGraph = new DirectedGraph();
+		DirectedGraphNodeCoordinates coords = new DirectedGraphNodeCoordinates();
+		for (Coordinate v : graph.getGraph().vertexSet()) {
+			int index = graph.getVerticesIndex().get(v);
+			newGraph.addNode(index);
+			coords.put(index, new Point2D.Double(v.x,v.y));
+		}
+		DirectedGraphWeightFunction function = new DirectedGraphWeightFunction();
+		for (DefaultEdge e : graph.getGraph().edgeSet()) {
+			int idS = graph.getVerticesIndex().get(graph.getEdgeSource(e));
+			int idT = graph.getVerticesIndex().get(graph.getEdgeTarget(e));
+			newGraph.addArc(idS,idT);
+			function.put(idS, idT, (int)Math.round(((Geometry) e.getUserObject()).getLength()));
+			if (! isDirected) {
+				newGraph.addArc(idT,idS);
+				function.put(idT, idS,(int) Math.round(((Geometry) e.getUserObject()).getLength()));
+			}
+		}
+		newGraph.setNodeCoordinates(coords);
+		newGraph.setWeightFunction(function);
+		return newGraph;
+	}
 }
