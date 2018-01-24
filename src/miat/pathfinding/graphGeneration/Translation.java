@@ -23,23 +23,9 @@ public class Translation {
 		}
 		int i = 0;
 		for (DefaultEdge e : graph.getGraph().edgeSet()) {
-			newGraph.addEdge(i+"", graph.getGraph().getEdgeSource(e).toString(),graph.getGraph().getEdgeTarget(e).toString(),isDirected);
-			if (isWeighted) newGraph.addAttribute("weight", graph.getGraph().getEdgeWeight(e));
+			Edge edge = newGraph.addEdge(i+"", graph.getGraph().getEdgeSource(e).toString(),graph.getGraph().getEdgeTarget(e).toString(),isDirected);
+			if (isWeighted) edge.setAttribute("weight", graph.getGraph().getEdgeWeight(e));
 			i++;
-		}
-		return newGraph;
-	} 
-	
-	public static InMemoryGrph benchmarkGraphToGrph(BenchmarkGraph<Integer, DefaultEdge> graph) {
-		InMemoryGrph newGraph = new InMemoryGrph();
-		boolean isDirected = graph.getGraph().getType().isDirected();
-		boolean isWeighted = graph.getGraph().getType().isWeighted();
-		for (Integer v : graph.getGraph().vertexSet()) {
-			newGraph.addVertex(v);
-		}
-		for (DefaultEdge e : graph.getGraph().edgeSet()) {
-			int edge = newGraph.addSimpleEdge(graph.getGraph().getEdgeSource(e), graph.getGraph().getEdgeTarget(e), isDirected);
-			if (isWeighted) newGraph.getEdgeWidthProperty().setValue(edge, graph.getGraph().getEdgeWeight(e)); 
 		}
 		return newGraph;
 	} 
@@ -56,11 +42,26 @@ public class Translation {
 		for (DefaultEdge e : graph.getGraph().edgeSet()) {
 			Edge edge = newGraph.addEdge(i+"", graph.getVerticesIndex().get(graph.getGraph().getEdgeSource(e)).toString(),graph.getVerticesIndex().get(graph.getGraph().getEdgeTarget(e)).toString(),isDirected);
 			if (isWeighted) edge.setAttribute("weight", graph.getGraph().getEdgeWeight(e));
-			
 			i++;
 		}
 		return newGraph;
 	} 
+	
+	public static InMemoryGrph benchmarkGraphToGrph(BenchmarkGraph<Integer, DefaultEdge> graph) {
+		InMemoryGrph newGraph = new InMemoryGrph();
+		boolean isDirected = graph.getGraph().getType().isDirected();
+		boolean isWeighted = graph.getGraph().getType().isWeighted();
+		for (Integer v : graph.getGraph().vertexSet()) {
+			newGraph.addVertex(v);
+		}
+		for (DefaultEdge e : graph.getGraph().edgeSet()) {
+			int edge = newGraph.addSimpleEdge(graph.getGraph().getEdgeSource(e), graph.getGraph().getEdgeTarget(e), isDirected);
+			if (isWeighted) newGraph.getEdgeWidthProperty().setValue(edge, (int) Math.round(graph.getGraph().getEdgeWeight(e))); 
+		}
+		return newGraph;
+	} 
+	
+	
 	
 	public static InMemoryGrph benchmarkGraphToGrphSpatial(BenchmarkGraph<Coordinate, DefaultEdge> graph) {
 		EuclideanGrph newGraph = new EuclideanGrph();
@@ -73,7 +74,7 @@ public class Translation {
 		}
 		for (DefaultEdge e : graph.getGraph().edgeSet()) {
 			int edge = newGraph.addSimpleEdge(graph.getVerticesIndex().get(graph.getGraph().getEdgeSource(e)), graph.getVerticesIndex().get(graph.getGraph().getEdgeTarget(e)), isDirected);
-			if (isWeighted) newGraph.getEdgeWidthProperty().setValue(edge, graph.getGraph().getEdgeWeight(e)); 
+			if (isWeighted) newGraph.getEdgeWidthProperty().setValue(edge, (int) Math.round(graph.getGraph().getEdgeWeight(e))); 
 		
 		}
 		return newGraph;

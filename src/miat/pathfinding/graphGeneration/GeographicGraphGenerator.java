@@ -70,7 +70,7 @@ public class GeographicGraphGenerator {
 		        }
 		    }
 		    for (DefaultEdge edge : newGraph.edgeSet()) {
-		    	newGraph.setEdgeWeight(edge,((Geometry) edge.getUserObject()).getLength());
+		    	newGraph.setEdgeWeight(edge,(int) Math.round(((Geometry) edge.getUserObject()).getLength()));
 		    }
 		    g.setGraph(newGraph);
 		    return g;

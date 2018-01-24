@@ -19,7 +19,7 @@ public class GraphStreamBellmanFord implements ShortestPathAlgorithm {
 		org.graphstream.graph.Graph gsg = Translation.benchmarkGraphToGraphStream(graph);
 		BellmanFord bellman = new BellmanFord("weight");
 		bellman.init(gsg);
-		bellman.setSource(gsg.getNode(source.toString()));
+		bellman.setSource(source.toString());
 		Node tar = gsg.getNode(target.toString());
 		
 		long t = System.currentTimeMillis();

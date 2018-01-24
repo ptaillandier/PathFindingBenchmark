@@ -31,9 +31,9 @@ public class ShortestPathAlgorithms {
 		//algorithms1path.add(new JGraphtBellmanFord());
 		algorithms1path.add(new GraphStreamDijkstra());
 		algorithms1path.add(new GraphStreamAStar());
-	//	algorithms1path.add(new GraphStreamBellmanFord());
+		//algorithms1path.add(new GraphStreamBellmanFord());
 
-		algorithms1path.add(new GrphDijkstra());
+		//algorithms1path.add(new GrphDijkstra());
 		algorithms1path.add(new GrphStackBasedBellmanFord());
 		
 		algorithmsAllpaths = new ArrayList<>();
