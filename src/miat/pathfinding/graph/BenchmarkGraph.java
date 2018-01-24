@@ -29,5 +29,12 @@ public class BenchmarkGraph<V,E> {
 		return verticesIndex.get(v).toString();
 	}
 	
+	public V getEdgeSource(E e) {
+		return graph.getEdgeSource(e);
+	}
+	
+	public V getEdgeTarget(E e) {
+		return graph.getEdgeTarget(e);
+	}
 
 }

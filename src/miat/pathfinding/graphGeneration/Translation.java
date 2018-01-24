@@ -6,7 +6,10 @@ import org.graphstream.graph.implementations.SingleGraph;
 import org.jgraph.graph.DefaultEdge;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
 
+import edu.uci.ics.jung.graph.SparseGraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
 import grph.algo.mobility.Location;
 import grph.algo.topology.manet.EuclideanGrph;
 import grph.in_memory.InMemoryGrph;
@@ -76,6 +79,34 @@ public class Translation {
 			int edge = newGraph.addSimpleEdge(graph.getVerticesIndex().get(graph.getGraph().getEdgeSource(e)), graph.getVerticesIndex().get(graph.getGraph().getEdgeTarget(e)), isDirected);
 			if (isWeighted) newGraph.getEdgeWidthProperty().setValue(edge, (int) Math.round(graph.getGraph().getEdgeWeight(e))); 
 		
+		}
+		return newGraph;
+	} 
+	
+	public static SparseGraph<Integer,Integer> benchmarkGraphToJung (BenchmarkGraph<Integer, DefaultEdge> graph) {
+		boolean isDirected = graph.getGraph().getType().isDirected();  
+		SparseGraph<Integer, Integer> newGraph = new SparseGraph<>();
+		
+		for (Integer v : graph.getGraph().vertexSet()) {
+			newGraph.addVertex(v);
+		}
+		int i = 0;
+		for (DefaultEdge e : graph.getGraph().edgeSet()) {
+			newGraph.addEdge(i, graph.getEdgeSource(e),graph.getEdgeTarget(e),isDirected ? EdgeType.DIRECTED : EdgeType.UNDIRECTED);
+			i++;
+		}
+		return newGraph;
+	} 
+	
+	public static SparseGraph<Coordinate, Geometry> benchmarkGraphToJungSpatial(BenchmarkGraph<Coordinate, DefaultEdge> graph) {
+		boolean isDirected = graph.getGraph().getType().isDirected();
+		SparseGraph<Coordinate, Geometry> newGraph = new SparseGraph<>();
+		
+		for (Coordinate v : graph.getGraph().vertexSet()) {
+			newGraph.addVertex(v);
+		}
+		for (DefaultEdge e : graph.getGraph().edgeSet()) {
+			newGraph.addEdge((Geometry) e.getUserObject(),graph.getEdgeSource(e),graph.getEdgeTarget(e),isDirected ? EdgeType.DIRECTED : EdgeType.UNDIRECTED);
 		}
 		return newGraph;
 	} 

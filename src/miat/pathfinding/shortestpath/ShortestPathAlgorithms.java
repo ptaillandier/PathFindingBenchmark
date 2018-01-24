@@ -16,6 +16,7 @@ import miat.pathfinding.shortestpath.jgrapht.JGraphtBidirectionalDijkstra;
 import miat.pathfinding.shortestpath.jgrapht.JGraphtDijkstra;
 import miat.pathfinding.shortestpath.jgrapht.JGraphtFloydWarshall;
 import miat.pathfinding.shortestpath.jgrapht.JGraphtJohnsonShortestPaths;
+import miat.pathfinding.shortestpath.jung.JungDijkstra;
 
 public class ShortestPathAlgorithms {
 
@@ -35,6 +36,8 @@ public class ShortestPathAlgorithms {
 
 		//algorithms1path.add(new GrphDijkstra());
 		algorithms1path.add(new GrphStackBasedBellmanFord());
+		
+		algorithms1path.add(new JungDijkstra());
 		
 		algorithmsAllpaths = new ArrayList<>();
 		algorithmsAllpaths.add(new JGraphtJohnsonShortestPaths());

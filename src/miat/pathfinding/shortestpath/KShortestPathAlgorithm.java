@@ -1,7 +1,6 @@
 package miat.pathfinding.shortestpath;
 
 import org.jgraph.graph.DefaultEdge;
-import org.jgrapht.Graph;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
