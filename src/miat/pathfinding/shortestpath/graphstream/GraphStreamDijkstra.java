@@ -17,18 +17,22 @@ public class GraphStreamDijkstra extends AbstractShortestPathAlgorihm<org.graphs
 	@Override
 	public Result shortestPathComputation(BenchmarkGraph<Integer, DefaultEdge> graph, Integer source, Integer target) {
 		org.graphstream.graph.Graph gsg = getCache() == null ? Translation.benchmarkGraphToGraphStream(graph) : getCache();
-		Dijkstra dijkstra = new Dijkstra();
+		Dijkstra dijkstra;
+		if(graph.getType().isWeighted()){
+			dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "weight");
+		} else {
+			dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, null);
+		}
 		dijkstra.init(gsg);
 		dijkstra.setSource(gsg.getNode(source.toString()));
 		Node tar = gsg.getNode(target.toString());
-		
+
 		long t = System.currentTimeMillis();
 		dijkstra.compute();
-		Path path = dijkstra.getPath(tar);
+		double distance = dijkstra.getPathLength(tar);
 		t = System.currentTimeMillis() - t;
-		if (path == null || path.getEdgePath().isEmpty()) return new Result(t, 0.0);
-		
-		return new Result(t, graph.getType().isWeighted() ? path.getPathWeight("weight") : path.getEdgeSet().size());
+		if (distance == Double.POSITIVE_INFINITY ) return new Result(t, 0.0);
+		return new Result(t, distance);
 	}
 	
 	@Override
@@ -44,18 +48,22 @@ public class GraphStreamDijkstra extends AbstractShortestPathAlgorihm<org.graphs
 	@Override
 	public Result spatialShortestPathComputation(BenchmarkGraph<Coordinate, DefaultEdge> graph, Coordinate source, Coordinate target) {
 		org.graphstream.graph.Graph gsg = getCache() == null ? Translation.benchmarkGraphToGraphStreamSpatial(graph) : getCache();
-		Dijkstra dijkstra = new Dijkstra();
+		Dijkstra dijkstra;
+		if(graph.getType().isWeighted()){
+			dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, "weight");
+		} else {
+			dijkstra = new Dijkstra(Dijkstra.Element.EDGE, null, null);
+		}
 		dijkstra.init(gsg);
 		dijkstra.setSource(gsg.getNode(graph.getStrId(source)));
 		Node tar = gsg.getNode(graph.getStrId(target));
-		
+
 		long t = System.currentTimeMillis();
 		dijkstra.compute();
-		Path path = dijkstra.getPath(tar);
+		double distance = dijkstra.getPathLength(tar);
 		t = System.currentTimeMillis() - t;
-		if (path == null || path.getEdgePath().isEmpty()) return new Result(t, 0.0);
-		
-		return new Result(t, graph.getType().isWeighted() ? path.getPathWeight("weight") : path.getEdgeSet().size());
+		if (distance == Double.POSITIVE_INFINITY ) return new Result(t, 0.0);
+		return new Result(t, distance);
 	}
 
 }
